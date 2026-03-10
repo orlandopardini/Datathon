@@ -1,5 +1,5 @@
-// API Base URL
-const API_URL = 'http://localhost:8000';
+// API Base URL - Uses relative URLs to work both locally and in production (Render)
+const API_URL = '';
 
 // Initialize the dashboard
 document.addEventListener('DOMContentLoaded', function() {
