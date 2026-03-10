@@ -4,42 +4,34 @@ Guia rápido para fazer deploy no Render em 5 minutos.
 
 ---
 
+## ✅ Modelo Já Incluído
+
+**Importante**: O modelo já vem **treinado e validado** no repositório.  
+Você **não precisa treinar** - apenas fazer deploy!
+
+📦 Localização: `app/model/model.joblib` (já no GitHub)
+
+---
+
 ## ⚡ Deploy Rápido (5 minutos)
 
-### 1. Preparar Projeto
+### 1. Código Já Está no GitHub
 
-```bash
-# Windows
-prepare-deploy.bat
+✅ **Repositório**: https://github.com/orlandopardini/Datathon  
+✅ **Modelo incluído**: app/model/model.joblib  
+✅ **Configuração**: render.yaml
 
-# Linux/Mac
-bash prepare-deploy.sh
-```
-
-### 2. Criar Repositório GitHub
-
-1. Acesse: https://github.com/new
-2. Nome: `passos-magicos-evasao-api`
-3. Deixe vazio (não adicione README, .gitignore, etc)
-
-### 3. Push para GitHub
-
-```bash
-git remote add origin https://github.com/SEU_USUARIO/passos-magicos-evasao-api.git
-git push -u origin main
-```
-
-### 4. Deploy no Render
+**Não precisa fazer nada localmente!**
 
 1. Acesse: https://dashboard.render.com
 2. Clique em **"New"** → **"Web Service"**
 3. Conecte sua conta GitHub (se ainda não conectou)
-4. Selecione o repositório `passos-magicos-evasao-api`
+4. Selecione o repositório: **orlandopardini/Datathon**
 5. Render detectará automaticamente `render.yaml`
 6. Clique em **"Create Web Service"**
 7. Aguarde ~3-5 minutos
 
-### 5. Testar API
+### 3. Testar API
 
 Após deploy concluído:
 
@@ -47,9 +39,15 @@ Após deploy concluído:
 # Health check
 curl https://passos-magicos-evasao-api.onrender.com/health
 
-# Documentação (abrir no navegador)
+# Documentação Swagger (abrir no navegador)
 https://passos-magicos-evasao-api.onrender.com/docs
 ```
+
+### 4. Fazer Predição
+
+Acesse a documentação Swagger: `/docs`
+
+Ou use curl:
 
 ---
 

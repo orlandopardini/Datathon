@@ -98,37 +98,58 @@ O dashboard foi otimizado para **facilidade de uso** com apenas **9 campos obrig
 
 ## 2) Instruções de Deploy
 
-### 🚀 Início Rápido (Windows)
+### 🎯 Modelo Pré-Treinado Incluído
 
-#### Opção 1: Menu Interativo (Recomendado)
+✅ **O modelo já vem treinado e validado!**
+- Não é necessário treinar novamente
+- Modelo v3.0 com ROC-AUC 99.5%
+- Arquivos em `app/model/` já prontos para uso
+- Basta iniciar a API e fazer predições
+
+### 🚀 Início Rápido - Uso da API
+
+#### Opção 1: Iniciar API Localmente (Desenvolvimento)
 ```bash
-start.bat
+# Windows
+procedures\run.bat
+
+# Linux/Mac
+uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
-Menu com 5 opções:
-1. Setup Inicial
-2. Treinar Modelo
-3. Executar Testes
-4. Iniciar Dashboard
-5. Iniciar com Monitoramento
 
-#### Opção 2: Comandos Individuais
+**Acesse:**
+- **Dashboard**: http://localhost:8000
+- **Documentação Swagger**: http://localhost:8000/docs
+- **API ReDoc**: http://localhost:8000/redoc
+
+#### Opção 2: Setup Completo (Para Desenvolvedores)
+
+Se você quiser modificar o código ou retreinar o modelo:
+
 ```bash
-procedures\setup.bat               # 1. Configura ambiente virtual e instala dependências
-procedures\train.bat               # 2. Treina modelo com dados PEDE 2024
-procedures\test.bat                # 3. Executa testes unitários
-procedures\run.bat                 # 4. Inicia API + Dashboard na porta 8000
-procedures\run-with-monitoring.bat # 5. API (8000) + Dashboard Drift (8501)
+# 1. Instalar dependências
+procedures\setup.bat
+
+# 2. (Opcional) Retreinar modelo
+procedures\train.bat
+
+# 3. (Opcional) Executar testes
+procedures\test.bat
+
+# 4. Iniciar API
+procedures\run.bat
 ```
 
 ### 📋 Pré-requisitos
 
 - **Python**: 3.11+ (testado em 3.14)
-- **Sistema Operacional**: Windows (scripts .bat) / Linux/Mac (adaptar para .sh)
-- **Memória**: Mínimo 2GB RAM
-- **Dados**: Arquivo Excel `BASE DE DADOS PEDE 2024 - DATATHON.xlsx`
-- **Docker** (opcional): Para containerização
+- **Sistema Operacional**: Windows / Linux / Mac
+- **Memória**: Mínimo 512MB RAM (recomendado: 1GB+)
+- ✅ **Modelo**: Já incluído em `app/model/` (não precisa treinar)
 
-### 🔧 Instalação de Dependências
+### 🔧 Instalação de Dependências (Opcional - Apenas para Desenvolvimento)
+
+Se você for modificar o código ou quiser rodar localmente:
 
 #### Setup Automático
 ```bash
@@ -174,25 +195,9 @@ pytest-cov>=6.0.0
 httpx
 ```
 
-### 🎓 Treinamento do Modelo
+### � Executando a API
 
-#### Automático (com arquivo já configurado)
-```bash
-procedures\train.bat
-```
-
-#### Manual
-```bash
-python -m src.train --data-path "C:\caminho\BASE DE DADOS PEDE 2024 - DATATHON.xlsx" --sheet "PEDE2024"
-```
-
-**Artefatos gerados** em `app/model/`:
-- `model.joblib` - Pipeline completa (preprocessamento + modelo)
-- `feature_columns.json` - Colunas esperadas (numeric + categorical)
-- `baseline.json` - Estatísticas de baseline para drift
-- `metrics.json` - Métricas de avaliação no holdout
-
-### 🌐 Executando a API
+✅ **Modelo já incluído** - Pode iniciar diretamente!
 
 #### Local (desenvolvimento)
 ```bash
