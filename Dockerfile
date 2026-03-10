@@ -6,8 +6,12 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar todo o código da aplicação
-COPY . .
+# Copiar código da aplicação e modelo (FORÇA REBUILD - 2026-03-10)
+COPY app/ ./app/
+COPY src/ ./src/
+
+# Verificar que o modelo foi copiado corretamente
+RUN python -c "import joblib; model = joblib.load('app/model/model.joblib'); print('Modelo carregado com sucesso!')"
 
 # Expor porta (Render usa variável $PORT)
 EXPOSE 8000
