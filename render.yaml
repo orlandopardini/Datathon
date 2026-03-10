@@ -1,49 +1,13 @@
 services:
-  # API de Predição de Risco de Evasão
   - type: web
     name: passos-magicos-evasao-api
     env: python
-    runtime: python-3.11
     buildCommand: pip install --upgrade pip && pip install -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
-    
-    # Plano gratuito (Free tier)
     plan: free
-    
-    # Region (mais próximo do Brasil)
-    region: oregon
-    
-    # Health check
     healthCheckPath: /health
-    
-    # Variáveis de ambiente
-    envVars:
-      - key: PYTHON_VERSION
-        value: 3.11
-      - key: MODEL_VERSION
-        value: 3.0-fixed-2026-03-10
-      - key: ENVIRONMENT
-        value: production
-      - key: LOG_LEVEL
-        value: INFO
-      - key: MAX_WORKERS
-        value: 1
-      
-    # Configurações de disco (modelo e logs)
-    disk:
-      name: passos-magicos-data
-      mountPath: /app/data
-      sizeGB: 1
-    
-    # Auto-deploy no push para main
     autoDeploy: true
     
-    # Branch a ser deployado
-    branch: main
-
-# Configuração de banco de dados (opcional - futuro)
-# databases:
-#   - name: passos-magicos-db
-#     databaseName: evasao_db
-#     user: evasao_user
-#     plan: free
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11"
