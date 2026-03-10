@@ -4,7 +4,21 @@ Sistema completo de Machine Learning para identificação precoce de estudantes 
 
 ---
 
-## 📋 Índice
+## � API em Produção
+
+**URL da API**: https://datathon-passos-magicos-sj7o.onrender.com/
+
+**Endpoints disponíveis**:
+- 🏠 **Dashboard**: [https://datathon-passos-magicos-sj7o.onrender.com/](https://datathon-passos-magicos-sj7o.onrender.com/)
+- 📖 **Documentação Swagger**: [https://datathon-passos-magicos-sj7o.onrender.com/docs](https://datathon-passos-magicos-sj7o.onrender.com/docs)
+- 📚 **ReDoc**: [https://datathon-passos-magicos-sj7o.onrender.com/redoc](https://datathon-passos-magicos-sj7o.onrender.com/redoc)
+- ❤️ **Health Check**: [https://datathon-passos-magicos-sj7o.onrender.com/health](https://datathon-passos-magicos-sj7o.onrender.com/health)
+
+**Status**: ✅ Modelo v3.0 pré-treinado (ROC-AUC: 99.5%, Accuracy: 97.0%)
+
+---
+
+## �📋 Índice
 
 1. [Visão Geral do Projeto](#1-visão-geral-do-projeto)
 2. [Instruções de Deploy](#2-instruções-de-deploy)
