@@ -1,0 +1,28 @@
+{
+  "numeric": [
+    "Idade",
+    "Ano ingresso",
+    "IDA",
+    "Mat",
+    "Por",
+    "Ing",
+    "INDE 22",
+    "INDE 23",
+    "INDE 2024",
+    "IAA",
+    "IPS",
+    "IPP",
+    "IPV",
+    "IAN",
+    "Nº Av",
+    "Fase_num",
+    "Tempo_programa",
+    "Idade_ingresso"
+  ],
+  "categorical": [
+    "Fase",
+    "Turma",
+    "Gênero",
+    "Instituição de ensino"
+  ]
+}

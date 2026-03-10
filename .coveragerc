@@ -1,0 +1,24 @@
+# .coveragerc - Configuração de Cobertura de Testes
+
+[run]
+source = src
+branch = True
+omit =
+    */__init__.py
+    */tests/*
+    */__pycache__/*
+    */venv/*
+    */.venv/*
+    src/train.py
+
+[report]
+# Script principal (train.py) omitido - testado via integração
+# Cobertura alvo: 80% nos módulos core (drift, evaluate, feature_engineering, preprocessing, utils)
+fail_under = 80
+show_missing = True
+skip_covered = False
+skip_empty = True
+precision = 2
+
+[html]
+directory = htmlcov

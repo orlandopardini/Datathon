@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datathon Passos Mágicos - ML Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo-section">
+                <h1>🎓 Passos Mágicos</h1>
+                <p class="subtitle">Machine Learning Dashboard - Prevenção de Risco Acadêmico</p>
+            </div>
+            <nav class="nav-menu">
+                <a href="#overview" class="nav-link active">Visão Geral</a>
+                <a href="#model" class="nav-link">Modelo</a>
+                <a href="#predict" class="nav-link">Predição</a>
+                <a href="#procedures" class="nav-link">Procedimentos</a>
+                <a href="#drift" class="nav-link">Monitoramento</a>
+                <a href="http://localhost:8000/docs" target="_blank" class="nav-link">API Docs</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Mudando vidas por meio da educação e tecnologia</h2>
+                <p>Sistema de Machine Learning para identificação precoce de estudantes em risco de desempenho acadêmico baixo</p>
+                <div class="hero-stats">
+                    <div class="stat-card">
+                        <span class="stat-number" id="totalStudents">-</span>
+                        <span class="stat-label">Estudantes Analisados</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="modelAccuracy">-</span>
+                        <span class="stat-label">Acurácia do Modelo</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="predictions">-</span>
+                        <span class="stat-label">Predições Realizadas</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Model Metrics Section -->
+    <section id="model" class="section metrics-section">
+        <div class="container">
+            <h2 class="section-title">📊 Métricas do Modelo</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h3>Acurácia</h3>
+                    <div class="metric-value" id="accuracy">-</div>
+                    <div class="metric-chart">
+                        <canvas id="accuracyChart"></canvas>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <h3>Precisão</h3>
+                    <div class="metric-value" id="precision">-</div>
+                    <div class="metric-chart">
+                        <canvas id="precisionChart"></canvas>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <h3>Recall</h3>
+                    <div class="metric-value" id="recall">-</div>
+                    <div class="metric-chart">
+                        <canvas id="recallChart"></canvas>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <h3>F1-Score</h3>
+                    <div class="metric-value" id="f1">-</div>
+                    <div class="metric-chart">
+                        <canvas id="f1Chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Confusion Matrix -->
+            <div class="confusion-matrix-section">
+                <h3>Matriz de Confusão</h3>
+                <div class="confusion-matrix" id="confusionMatrix">
+                    <div class="matrix-row">
+                        <div class="matrix-label">Predito: Não</div>
+                        <div class="matrix-cell tn"><span class="cell-value" id="tn">-</span><span class="cell-label">TN</span></div>
+                        <div class="matrix-cell fp"><span class="cell-value" id="fp">-</span><span class="cell-label">FP</span></div>
+                    </div>
+                    <div class="matrix-row">
+                        <div class="matrix-label">Predito: Sim</div>
+                        <div class="matrix-cell fn"><span class="cell-value" id="fn">-</span><span class="cell-label">FN</span></div>
+                        <div class="matrix-cell tp"><span class="cell-value" id="tp">-</span><span class="cell-label">TP</span></div>
+                    </div>
+                    <div class="matrix-labels">
+                        <span>Real: Não</span>
+                        <span>Real: Sim</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ROC Curve -->
+            <div class="chart-section">
+                <h3>Curvas ROC-AUC e PR-AUC</h3>
+                <div class="charts-row">
+                    <div class="chart-container">
+                        <canvas id="rocChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="prChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prediction Section -->
+    <section id="predict" class="section prediction-section">
+        <div class="container">
+            <h2 class="section-title">🔮 Realizar Predição</h2>
+            <p class="section-description" style="max-width: 800px; margin: 0 auto 30px; color: #666;">
+                <strong>📚 Modelo v2.0:</strong> Preencha os dados do aluno para prever o <strong>risco de desempenho acadêmico baixo</strong> (média < 6.0). 
+                Apenas os campos essenciais são solicitados para facilitar o uso.
+            </p>
+            <div class="prediction-container">
+                <form id="predictionForm" class="prediction-form">
+                    
+                    <h3 style="color: #5ca7e8; margin: 20px 0 15px; font-size: 18px;">📋 Dados Básicos</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Idade <span style="color: #999; font-size: 12px;">(anos completos)</span></label>
+                            <input type="number" name="Idade" min="6" max="20" placeholder="Ex: 12" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Gênero</label>
+                            <select name="Gênero" required>
+                                <option value="">Selecione...</option>
+                                <option value="M">Masculino</option>
+                                <option value="F">Feminino</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Ano de Ingresso <span style="color: #999; font-size: 12px;">(quando entrou no programa)</span></label>
+                            <input type="number" name="Ano ingresso" min="2015" max="2026" placeholder="Ex: 2020" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Fase Atual <span style="color: #999; font-size: 12px;">(nível no programa)</span></label>
+                            <select name="Fase" required>
+                                <option value="">Selecione...</option>
+                                <option value="ALFA">ALFA (Inicial)</option>
+                                <option value="1A">1A</option>
+                                <option value="2A">2A</option>
+                                <option value="3A">3A</option>
+                                <option value="4A">4A</option>
+                                <option value="5A">5A</option>
+                                <option value="6A">6A</option>
+                                <option value="7A">7A</option>
+                                <option value="8A">8A</option>
+                                <option value="9">9 (Avançado)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Tipo de Escola</label>
+                            <select name="Instituição de ensino" required>
+                                <option value="">Selecione...</option>
+                                <option value="Escola Pública">Pública</option>
+                                <option value="Escola Particular">Particular</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h3 style="color: #5ca7e8; margin: 30px 0 15px; font-size: 18px;">📊 Indicadores de Desempenho (escala 0-10)</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>INDE 2024 <span style="color: #999; font-size: 12px;">(Desenvolvimento Educacional atual)</span></label>
+                            <input type="number" name="INDE 2024" step="0.1" min="0" max="10" placeholder="Ex: 7.5" required>
+                        </div>
+                        <div class="form-group">
+                            <label>IAA <span style="color: #999; font-size: 12px;">(Adequação de Aprendizagem)</span></label>
+                            <input type="number" name="IAA" step="0.1" min="0" max="10" placeholder="Ex: 6.8" required>
+                        </div>
+                        <div class="form-group">
+                            <label>IPS <span style="color: #999; font-size: 12px;">(Psicossocial)</span></label>
+                            <input type="number" name="IPS" step="0.1" min="0" max="10" placeholder="Ex: 7.0" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Nº de Avaliações <span style="color: #999; font-size: 12px;">(realizadas no ano)</span></label>
+                            <input type="number" name="Nº Av" min="0" max="50" placeholder="Ex: 12" required>
+                        </div>
+                    </div>
+
+                    <details style="margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; cursor: pointer;">
+                        <summary style="font-weight: 500; color: #666; cursor: pointer;">⚙️ Campos Opcionais (clique para expandir)</summary>
+                        <div class="form-grid" style="margin-top: 15px;">
+                            <div class="form-group">
+                                <label>INDE 2023 <span style="color: #999; font-size: 12px;">(histórico)</span></label>
+                                <input type="number" name="INDE 23" step="0.1" min="0" max="10" placeholder="Deixe vazio se não souber">
+                            </div>
+                            <div class="form-group">
+                                <label>INDE 2022 <span style="color: #999; font-size: 12px;">(histórico)</span></label>
+                                <input type="number" name="INDE 22" step="0.1" min="0" max="10" placeholder="Deixe vazio se não souber">
+                            </div>
+                            <div class="form-group">
+                                <label>IPP <span style="color: #999; font-size: 12px;">(Psicopedagógico)</span></label>
+                                <input type="number" name="IPP" step="0.1" min="0" max="10" placeholder="Deixe vazio se não souber">
+                            </div>
+                            <div class="form-group">
+                                <label>IPV <span style="color: #999; font-size: 12px;">(Ponto de Virada)</span></label>
+                                <input type="number" name="IPV" step="0.1" min="0" max="10" placeholder="Deixe vazio se não souber">
+                            </div>
+                            <div class="form-group">
+                                <label>IAN <span style="color: #999; font-size: 12px;">(Autoavaliação)</span></label>
+                                <input type="number" name="IAN" step="0.1" min="0" max="10" placeholder="Deixe vazio se não souber">
+                            </div>
+                        </div>
+                    </details>
+
+                    <button type="submit" class="btn btn-primary">🎯 Calcular Risco Acadêmico</button>
+                </form>
+
+                <div id="predictionResult" class="prediction-result" style="display: none;">
+                    <h3>Resultado da Predição</h3>
+                    <div class="result-content">
+                        <div class="result-status" id="resultStatus"></div>
+                        <div class="result-probability">
+                            <span>Probabilidade de Risco:</span>
+                            <span class="probability-value" id="probabilityValue">-</span>
+                        </div>
+                        <div class="probability-bar">
+                            <div class="probability-fill" id="probabilityFill"></div>
+                        </div>
+                        <p class="result-message" id="resultMessage"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Drift Monitoring Section -->
+    <section id="drift" class="section drift-section">
+        <div class="container">
+            <h2 class="section-title">📈 Monitoramento de Drift</h2>
+            <div class="drift-container">
+                <div class="drift-info">
+                    <p>O monitoramento de drift detecta mudanças na distribuição dos dados que podem afetar o desempenho do modelo.</p>
+                    <button onclick="loadDrift()" class="btn btn-secondary">Atualizar Drift</button>
+                </div>
+                <div class="drift-metrics" id="driftMetrics">
+                    <div class="loading">Carregando dados de drift...</div>
+                </div>
+                <div class="drift-chart-container">
+                    <canvas id="driftChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Procedures Section -->
+    <section id="procedures" class="section procedures-section">
+        <div class="container">
+            <h2 class="section-title">⚙️ Procedimentos do Sistema</h2>
+            <p class="section-description">Execute os processos do sistema diretamente pelo navegador. Clique em cada procedimento para ver detalhes.</p>
+            <div id="proceduresGrid" class="procedures-grid">
+                <!-- Procedures will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="overview" class="section about-section">
+        <div class="container">
+            <h2 class="section-title">Sobre o Projeto</h2>
+            <div class="about-content">
+                <div class="about-card">
+                    <h3>🎯 Objetivo</h3>
+                    <p>Desenvolver um modelo preditivo capaz de estimar o risco de defasagem escolar de cada estudante, aplicando as melhores práticas de MLOps.</p>
+                </div>
+                <div class="about-card">
+                    <h3>🔧 Tecnologias</h3>
+                    <ul>
+                        <li><strong>Python 3.14</strong> - Linguagem principal</li>
+                        <li><strong>FastAPI</strong> - Framework web assíncrono</li>
+                        <li><strong>scikit-learn</strong> - Machine Learning</li>
+                        <li><strong>Docker</strong> - Containerização</li>
+                        <li><strong>Streamlit</strong> - Dashboard de monitoramento</li>
+                    </ul>
+                </div>
+                <div class="about-card">
+                    <h3>📊 Pipeline ML</h3>
+                    <ol>
+                        <li>Pré-processamento dos Dados</li>
+                        <li>Engenharia de Features</li>
+                        <li>Treinamento e Validação</li>
+                        <li>Deploy via API</li>
+                        <li>Monitoramento Contínuo</li>
+                    </ol>
+                </div>
+                <div class="about-card">
+                    <h3>✅ Cobertura de Testes</h3>
+                    <div class="coverage-badge">
+                        <span class="coverage-value">81%</span>
+                        <span class="coverage-label">Cobertura</span>
+                    </div>
+                    <p>Testes unitários garantindo qualidade do código</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Passos Mágicos</h4>
+                    <p>Transformando vidas através da educação</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Links</h4>
+                    <a href="https://passosmagicos.org.br/" target="_blank">Site Oficial</a>
+                    <a href="http://localhost:8000/docs" target="_blank">API Documentation</a>
+                    <a href="http://localhost:8501" target="_blank">Dashboard Drift</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Tecnologia</h4>
+                    <p>Datathon 2024 - MLOps</p>
+                    <p>Versão 1.0</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Passos Mágicos - Machine Learning Dashboard</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

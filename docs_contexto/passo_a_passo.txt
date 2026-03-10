@@ -1,0 +1,149 @@
+```txt
+PASSO A PASSO — SUBIR A APLICAÇÃO (Datathon Passos Mágicos MLOps)
+===============================================================
+
+Pré-requisitos:
+- Python 3.11+ instalado
+- (Opcional) Docker instalado
+- Arquivo de dados: "BASE DE DADOS PEDE 2024 - DATATHON.xlsx"
+- Projeto descompactado: datathon-passos-mlops/
+
+---------------------------------------------------------------
+1) DESCOMPACTAR E ENTRAR NA PASTA DO PROJETO
+---------------------------------------------------------------
+1.1) Descompacte o zip:
+    unzip datathon-passos-mlops.zip
+
+1.2) Entre na pasta:
+    cd datathon-passos-mlops
+
+
+---------------------------------------------------------------
+2) CRIAR AMBIENTE VIRTUAL E INSTALAR DEPENDÊNCIAS
+---------------------------------------------------------------
+2.1) Criar ambiente virtual:
+    python -m venv .venv
+
+2.2) Ativar ambiente:
+    Linux/Mac:
+      source .venv/bin/activate
+    Windows PowerShell:
+      .\.venv\Scripts\activate
+
+2.3) Instalar dependências:
+    pip install -r requirements.txt
+
+
+---------------------------------------------------------------
+3) TREINAR O MODELO (GERA OS ARTEFATOS USADOS PELA API)
+---------------------------------------------------------------
+3.1) Rodar treino apontando para o Excel (ajuste o caminho do arquivo):
+    python -m src.train --data-path "/caminho/BASE DE DADOS PEDE 2024 - DATATHON.xlsx" --sheet "PEDE2024"
+
+3.2) Verifique se foram criados os artefatos:
+    app/model/model.joblib
+    app/model/feature_columns.json
+    app/model/baseline.json
+    app/model/metrics.json
+
+
+---------------------------------------------------------------
+4) SUBIR A API (FASTAPI)
+---------------------------------------------------------------
+4.1) Rodar a API:
+    uvicorn app.main:app --host 0.0.0.0 --port 8000
+
+4.2) Checagens:
+    Health:
+      http://localhost:8000/health
+    Swagger (documentação interativa):
+      http://localhost:8000/docs
+
+
+---------------------------------------------------------------
+5) TESTAR O ENDPOINT /predict
+---------------------------------------------------------------
+5.1) Exemplo usando curl:
+    curl -X POST "http://localhost:8000/predict" \
+      -H "Content-Type: application/json" \
+      -d '{
+            "records": [
+              {
+                "Fase": "2A",
+                "Turma": "2A",
+                "Idade": 11,
+                "Gênero": "M",
+                "Ano ingresso": 2021,
+                "Instituição de ensino": "Escola Pública",
+                "IEG": 7.5,
+                "IDA": 6.0,
+                "Mat": 5.5,
+                "Por": 6.2,
+                "Ing": 6.0
+              }
+            ]
+          }'
+
+5.2) Observação:
+    Cada chamada ao /predict gera logs em:
+      app/logs/predictions.jsonl
+
+
+---------------------------------------------------------------
+6) CONSULTAR DRIFT VIA ENDPOINT /drift
+---------------------------------------------------------------
+6.1) Depois de algumas chamadas ao /predict:
+    curl "http://localhost:8000/drift"
+
+
+---------------------------------------------------------------
+7) SUBIR O PAINEL DE DRIFT (STREAMLIT)
+---------------------------------------------------------------
+7.1) Com a API rodando e logs gerados:
+    streamlit run monitoring/dashboard.py
+
+7.2) Abra o link que o Streamlit mostrar (geralmente):
+    http://localhost:8501
+
+
+---------------------------------------------------------------
+8) RODAR TESTES E VALIDAR COBERTURA (>=80%)
+---------------------------------------------------------------
+8.1) Executar testes:
+    pytest --cov=src --cov=app --cov-report=term-missing --cov-fail-under=80
+
+
+===============================================================
+OPÇÃO B — SUBIR COM DOCKER
+===============================================================
+
+---------------------------------------------------------------
+9) BUILD DA IMAGEM
+---------------------------------------------------------------
+9.1) Na raiz do projeto:
+    docker build -t passos-mlops .
+
+---------------------------------------------------------------
+10) RODAR O CONTAINER
+---------------------------------------------------------------
+10.1) Subir a API via Docker:
+    docker run -p 8000:8000 passos-mlops
+
+10.2) Acessos:
+    http://localhost:8000/health
+    http://localhost:8000/docs
+
+IMPORTANTE (Docker + modelo treinado):
+- A API precisa encontrar os artefatos em app/model/.
+- O jeito mais rápido é TREINAR LOCALMENTE (passo 3) e rodar o Docker montando volume:
+
+Exemplo (Linux/Mac):
+  docker run -p 8000:8000 \
+    -v "$(pwd)/app/model:/app/app/model" \
+    -v "$(pwd)/app/logs:/app/app/logs" \
+    passos-mlops
+
+(Assim, o container usa o modelo treinado e grava logs fora do container.)
+
+FIM
+```

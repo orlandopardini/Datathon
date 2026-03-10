@@ -1,0 +1,11 @@
+{
+  "model_type": "dropout_risk",
+  "description": "Prediz risco de EVASÃO ESCOLAR (abandono do programa) via engajamento baixo",
+  "threshold": 5.0,
+  "target_definition": "at_risk = 1 se IEG < 5.0",
+  "engajamento_usado_no_target": "IEG",
+  "features_count": 22,
+  "created_at": "2026-03-02",
+  "version": "3.0",
+  "interpretation": "IEG < 5.0 indica desengajamento crítico (presença baixa, participação fraca)"
+}

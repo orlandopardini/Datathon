@@ -1,0 +1,38 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs (não fazer commit)
+app/logs/*.jsonl
+app/logs/*.log
+
+# Model files - MANTER NO REPO para deploy
+# app/model/*.joblib  # Comentado - precisamos do modelo para deploy!
+# Apenas ignorar arquivos temporários do modelo
+app/model/*.tmp
+app/model/*.bak
+
+# Environment variables (criar .env baseado em .env.example)
+.env
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Backups locais (muito grandes para Git)
+backups/
+
+# Dados sensíveis (se houver)
+database/*.xlsx
+database/*.csv
