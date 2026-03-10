@@ -4,7 +4,7 @@ Sistema completo de Machine Learning para identificação precoce de estudantes 
 
 ---
 
-## � API em Produção
+## API em Produção
 
 **URL da API**: https://datathon-passos-magicos-sj7o.onrender.com/
 
@@ -18,7 +18,7 @@ Sistema completo de Machine Learning para identificação precoce de estudantes 
 
 ---
 
-## �📋 Índice
+# Índice
 
 1. [Visão Geral do Projeto](#1-visão-geral-do-projeto)
 2. [Instruções de Deploy](#2-instruções-de-deploy)
