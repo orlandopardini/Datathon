@@ -327,6 +327,41 @@ function createPRChart(prAuc) {
     });
 }
 
+// Fill example data in prediction form
+function fillExampleData() {
+    const form = document.getElementById('predictionForm');
+    
+    // Dados Básicos
+    form.querySelector('[name="Idade"]').value = '12';
+    form.querySelector('[name="Gênero"]').value = 'M';
+    form.querySelector('[name="Ano ingresso"]').value = '2020';
+    form.querySelector('[name="Fase"]').value = '1A';
+    form.querySelector('[name="Instituição de ensino"]').value = 'Escola Pública';
+    
+    // Indicadores de Desempenho
+    form.querySelector('[name="INDE 2024"]').value = '7.5';
+    form.querySelector('[name="IAA"]').value = '6.8';
+    form.querySelector('[name="IPS"]').value = '7.0';
+    form.querySelector('[name="Nº Av"]').value = '12';
+    
+    // Campos opcionais (deixar vazios)
+    form.querySelector('[name="INDE 23"]').value = '';
+    form.querySelector('[name="INDE 22"]').value = '';
+    form.querySelector('[name="IPP"]').value = '';
+    form.querySelector('[name="IPV"]').value = '';
+    form.querySelector('[name="IAN"]').value = '';
+    
+    // Scroll to form
+    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    
+    // Show success message
+    const message = document.createElement('div');
+    message.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #5cb85c; color: white; padding: 15px 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 9999; font-weight: 500;';
+    message.textContent = '✅ Formulário preenchido com dados de exemplo!';
+    document.body.appendChild(message);
+    setTimeout(() => message.remove(), 3000);
+}
+
 // Setup prediction form
 function setupPredictionForm() {
     const form = document.getElementById('predictionForm');
@@ -353,6 +388,8 @@ function setupPredictionForm() {
             data['Turma'] = data['Fase'] || '1A';
         }
         
+        console.log('Sending prediction request:', data);
+        
         try {
             const response = await fetch(`${API_URL}/predict`, {
                 method: 'POST',
@@ -362,7 +399,17 @@ function setupPredictionForm() {
                 body: JSON.stringify({ records: [data] })
             });
             
+            console.log('Response status:', response.status);
+            
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ detail: 'Erro desconhecido' }));
+                console.error('API Error:', errorData);
+                throw new Error(errorData.detail || `HTTP ${response.status}: ${response.statusText}`);
+            }
+            
             const result = await response.json();
+            console.log('Prediction result:', result);
+            
             displayPredictionResult(result.predictions[0]);
             
             // Update prediction count
@@ -371,7 +418,21 @@ function setupPredictionForm() {
             
         } catch (error) {
             console.error('Error making prediction:', error);
-            alert('Erro ao realizar predição. Verifique se a API está rodando.');
+            
+            // Show detailed error message
+            const errorMessage = document.createElement('div');
+            errorMessage.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #d9534f; color: white; padding: 20px 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 9999; max-width: 400px;';
+            errorMessage.innerHTML = `
+                <strong>❌ Erro ao realizar predição</strong><br>
+                <small style="margin-top: 5px; display: block;">${error.message}</small><br>
+                <small style="margin-top: 10px; display: block; opacity: 0.9;">
+                    ${error.message.includes('Failed to fetch') 
+                        ? 'Verifique se a API está rodando em: uvicorn app.main:app --reload' 
+                        : 'Verifique os dados e tente novamente'}
+                </small>
+            `;
+            document.body.appendChild(errorMessage);
+            setTimeout(() => errorMessage.remove(), 6000);
         }
     });
 }

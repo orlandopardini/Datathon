@@ -223,7 +223,10 @@
                         </div>
                     </details>
 
-                    <button type="submit" class="btn btn-primary">🎯 Calcular Risco Acadêmico</button>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <button type="submit" class="btn btn-primary" style="flex: 1; min-width: 200px;">🎯 Calcular Risco Acadêmico</button>
+                        <button type="button" class="btn btn-secondary" onclick="fillExampleData()" style="flex: 1; min-width: 200px;">📋 Preencher com Exemplo</button>
+                    </div>
                 </form>
 
                 <div id="predictionResult" class="prediction-result" style="display: none;">
