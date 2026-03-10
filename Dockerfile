@@ -1,27 +1,28 @@
 FROM python:3.11-slim
 
-# CACHE BREAKER - Força rebuild completo - Timestamp: 2026-03-10-01:20
-ENV MODEL_VERSION=v3.1-fixed-multiclass-2026-03-10-01:20
-ENV REBUILD_TRIGGER=20260310012000
+# CACHE BREAKER ULTRA - Força rebuild completo - Timestamp: 2026-03-10-01:30
+ENV MODEL_VERSION=v3.2-verified-no-multiclass-2026-03-10-01:30
+ENV REBUILD_TRIGGER=20260310013000
+ENV FORCE_NEW_MODEL=true
 
 WORKDIR /app
+
+# LIMPAR QUALQUER CACHE DE MODELO ANTIGO
+RUN rm -rf /app/model /app/app/model /tmp/*.joblib /tmp/joblib_* 2>/dev/null || true
 
 # Copiar requirements e instalar dependências
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# COPIAR MODELO PRIMEIRO (importante para debugging)
+# COPIAR SCRIPT DE VERIFICAÇÃO PRIMEIRO
+COPY verify_model.py ./
+
+# COPIAR MODELO
 COPY app/model/ ./app/model/
 
-# Verificar modelo ANTES de copiar resto do código
-RUN python -c "import joblib; \
-    model = joblib.load('app/model/model.joblib'); \
-    clf = model.named_steps['clf']; \
-    print('✅ Modelo carregado com sucesso!'); \
-    print('Solver:', clf.solver); \
-    print('Has multi_class attr:', hasattr(clf, 'multi_class')); \
-    assert not hasattr(clf, 'multi_class'), 'ERRO: Modelo ainda tem multi_class!'"
+# VERIFICAÇÃO RIGOROSA DO MODELO (FALHA SE multi_class EXISTIR)
+RUN python verify_model.py
 
 # Copiar resto do código
 COPY app/ ./app/
