@@ -53,7 +53,13 @@ def build_pipeline(numeric_cols: list[str], categorical_cols: list[str]) -> Pipe
     )
 
     # Modelo baseline robusto e interpretável
-    clf = LogisticRegression(max_iter=2000, n_jobs=None)
+    # sklearn 1.8.0+ não usa mais o parâmetro multi_class (inferido automaticamente)
+    clf = LogisticRegression(
+        max_iter=2000, 
+        n_jobs=None,
+        solver='lbfgs',  # Solver padrão mais estável
+        random_state=42
+    )
 
     model = Pipeline(steps=[("preprocess", preprocessor), ("clf", clf)])
     return model
