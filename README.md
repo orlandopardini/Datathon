@@ -14,11 +14,9 @@ Sistema completo de Machine Learning para identificação precoce de estudantes 
 - 📚 **ReDoc**: [https://datathon-passos-magicos-sj7o.onrender.com/redoc](https://datathon-passos-magicos-sj7o.onrender.com/redoc)
 - ❤️ **Health Check**: [https://datathon-passos-magicos-sj7o.onrender.com/health](https://datathon-passos-magicos-sj7o.onrender.com/health)
 
-**Status**: ✅ Modelo v3.0 pré-treinado (ROC-AUC: 99.5%, Accuracy: 97.0%)
-
 ---
 
-# Índice
+## Índice
 
 1. [Visão Geral do Projeto](#1-visão-geral-do-projeto)
 2. [Instruções de Deploy](#2-instruções-de-deploy)
@@ -95,7 +93,7 @@ O dashboard foi otimizado para **facilidade de uso** com apenas **9 campos obrig
 - ✅ **Tempo de preenchimento**: ~2 minutos (antes ~5 min)
 - ✅ **Features engineered** calculadas automaticamente pelo backend
 
-> 📖 Ver [GUIA_CAMPOS_FORMULARIO.md](docs_contexto/GUIA_CAMPOS_FORMULARIO.md) para detalhes sobre cada campo
+> 📖 Ver [GUIA_CAMPOS_FORMULARIO.md](docs/GUIA_CAMPOS_FORMULARIO.md) para detalhes sobre cada campo
 
 **Por que o modelo é confiável para produção:**
 1. ✅ **Predições intuitivas**: Notas BAIXAS → ALTO risco | Notas ALTAS → BAIXO risco
@@ -277,7 +275,7 @@ bash prepare-deploy.sh
 - ✅ Deploy automático no push
 - ✅ Plano free disponível (512MB RAM)
 
-📚 **Documentação completa**: [DEPLOY_QUICKSTART.md](DEPLOY_QUICKSTART.md) | [docs_contexto/DEPLOY_RENDER.md](docs_contexto/DEPLOY_RENDER.md)
+📚 **Documentação completa**: [DEPLOY_QUICKSTART.md](docs/DEPLOY_QUICKSTART.md) | [DEPLOY_RENDER.md](docs/DEPLOY_RENDER.md)
 
 ---
 
@@ -990,7 +988,7 @@ datathon/
 ├── Dockerfile                     # 🐳 Containerização
 ├── requirements.txt               # 📦 Dependências Python
 ├── README.md                      # 📖 Documentação completa (este arquivo)
-├── CHANGELOG.md                   # 📝 Histórico de versões
+├── docs/                          # 📚 Documentação do projeto
 │
 ├── procedures/                    # 🔧 Scripts de automação
 │   ├── setup.bat                 # Configuração inicial
@@ -1042,7 +1040,7 @@ datathon/
 │   ├── analise_completa_database.py  # Análise exploratória EDA
 │   └── debug_feature_engineering.py  # Debug features engineeradas
 │
-├── docs_contexto/                # 📚 Documentação detalhada
+│   ├── CHANGELOG.md              # 📝 Histórico de versões
 │   ├── README.md                 # Índice da documentação
 │   ├── 01_CONTEXTO_ATUAL.md      # Contexto do projeto
 │   ├── 02_ANALISE_DATABASE.md    # Análise dos dados
@@ -1071,7 +1069,7 @@ datathon/
 - `app/` - Serviço de API (inferência online)
 - `tests/` - Validação automatizada (unitários + integração)
 - `scripts/` - Análises ad-hoc e debugging
-- `docs_contexto/` - Documentação técnica e contexto
+- `docs/` - Documentação técnica e guias
 - `monitoring/` - Observabilidade e drift detection
 - `procedures/` - Automação operacional
 

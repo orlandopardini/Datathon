@@ -54,7 +54,7 @@ python scripts/backup_modelo.py
 python scripts/retreino_automatizado.py
 ```
 
-Ver documentação completa: [docs_contexto/ESTRATEGIA_RETREINO_MLOPS.md](docs_contexto/ESTRATEGIA_RETREINO_MLOPS.md)
+Ver documentação completa: [ESTRATEGIA_RETREINO_MLOPS.md](ESTRATEGIA_RETREINO_MLOPS.md)
 
 ---
 

@@ -210,7 +210,7 @@ Se algo der errado:
 2. **Testar localmente**: `uvicorn app.main:app`
 3. **Verificar dependências**: `pip list`
 4. **Verificar modelo**: `ls -lh app/model/`
-5. **Consultar**: [docs_contexto/DEPLOY_RENDER.md](docs_contexto/DEPLOY_RENDER.md)
+5. **Consultar**: [DEPLOY_RENDER.md](DEPLOY_RENDER.md)
 
 ---
 

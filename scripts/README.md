@@ -311,7 +311,5 @@ uvicorn app.main:app --reload
 
 ## 📚 Documentação Adicional
 
-- **Estratégia de Retreino**: [docs_contexto/ESTRATEGIA_RETREINO_MLOPS.md](../docs_contexto/ESTRATEGIA_RETREINO_MLOPS.md)
-- **Modelo de Evasão**: [docs_contexto/MODELO_EVASAO_README.md](../docs_contexto/MODELO_EVASAO_README.md)
-- **Redesign Completo**: [docs_contexto/REDESIGN_COMPLETO.md](../docs_contexto/REDESIGN_COMPLETO.md)
-- **MLOps Implementation**: [docs_contexto/MLOPS_IMPLEMENTATION.md](../docs_contexto/MLOPS_IMPLEMENTATION.md)
+- **Estratégia de Retreino**: [ESTRATEGIA_RETREINO_MLOPS.md](../docs/ESTRATEGIA_RETREINO_MLOPS.md)
+

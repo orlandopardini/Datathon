@@ -62,7 +62,7 @@ Sua API está no ar em:
 
 Para informações detalhadas, troubleshooting e configurações avançadas:
 
-👉 [DEPLOY_RENDER.md](docs_contexto/DEPLOY_RENDER.md)
+👉 [DEPLOY_RENDER.md](DEPLOY_RENDER.md)
 
 ---
 
